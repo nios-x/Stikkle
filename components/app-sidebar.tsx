@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import * as React from "react"
 import { useSession } from "next-auth/react"
 
@@ -36,22 +37,22 @@ const navMain = [
   },
   {
     title: "Lifecycle",
-    url: "#",
+    url: "/lifecycle",
     icon: <ListIcon />,
   },
   {
     title: "Analytics",
-    url: "#",
+    url: "/analytics",
     icon: <ChartBarIcon />,
   },
   {
     title: "Projects",
-    url: "#",
+    url: "/projects",
     icon: <FolderIcon />,
   },
   {
     title: "Team",
-    url: "#",
+    url: "/team",
     icon: <UsersIcon />,
   },
 ]
@@ -61,42 +62,42 @@ const navClouds = [
     title: "Capture",
     icon: <CameraIcon />,
     isActive: true,
-    url: "#",
+    url: "/capture",
     items: [
-      { title: "Active Proposals", url: "#" },
-      { title: "Archived", url: "#" },
+      { title: "Active Proposals", url: "/capture/active" },
+      { title: "Archived", url: "/capture/archived" },
     ],
   },
   {
     title: "Proposal",
     icon: <FileTextIcon />,
-    url: "#",
+    url: "/proposal",
     items: [
-      { title: "Active Proposals", url: "#" },
-      { title: "Archived", url: "#" },
+      { title: "Active Proposals", url: "/proposal/active" },
+      { title: "Archived", url: "/proposal/archived" },
     ],
   },
   {
     title: "Prompts",
     icon: <FileTextIcon />,
-    url: "#",
+    url: "/prompts",
     items: [
-      { title: "Active Proposals", url: "#" },
-      { title: "Archived", url: "#" },
+      { title: "Active Proposals", url: "/prompts/active" },
+      { title: "Archived", url: "/prompts/archived" },
     ],
   },
 ]
 
 const navSecondary = [
-  { title: "Settings", url: "#", icon: <Settings2Icon /> },
-  { title: "Get Help", url: "#", icon: <CircleHelpIcon /> },
-  { title: "Search", url: "#", icon: <SearchIcon /> },
+  { title: "Settings", url: "/settings", icon: <Settings2Icon /> },
+  { title: "Get Help", url: "/help", icon: <CircleHelpIcon /> },
+  { title: "Search", url: "/search", icon: <SearchIcon /> },
 ]
 
 const documents = [
-  { name: "Data Library", url: "#", icon: <DatabaseIcon /> },
-  { name: "Reports", url: "#", icon: <FileChartColumnIcon /> },
-  { name: "Word Assistant", url: "#", icon: <FileIcon /> },
+  { name: "Data Library", url: "/data-library", icon: <DatabaseIcon /> },
+  { name: "Reports", url: "/reports", icon: <FileChartColumnIcon /> },
+  { name: "Word Assistant", url: "/word-assistant", icon: <FileIcon /> },
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -117,9 +118,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <a href="/">
+              <Link href="/">
                 <CommandIcon className="size-5!" />
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

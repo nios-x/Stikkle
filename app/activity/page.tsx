@@ -5,7 +5,8 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getUser, getUserActivity } from "@/lib/github"
 import type { GitHubUser, GitHubRepo, GitHubIssue, GitHubPR } from "@/lib/github"
-import { ActivityContent, buildActivityEvents } from "@/components/activity-content"
+import { ActivityContent } from "@/components/activity-content"
+import { buildActivityEvents } from "@/lib/activity"
 
 // ── Page ─────────────────────────────────────────────────────────────
 export default async function ActivityPage() {
