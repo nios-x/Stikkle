@@ -93,6 +93,18 @@ export interface GitHubPR {
   changed_files: number;
 }
 
+export interface GitHubGist {
+  id: string;
+  html_url: string;
+  description: string | null;
+  public: boolean;
+  created_at: string;
+  updated_at: string;
+  files: Record<string, { filename: string; language: string | null; raw_url: string; size: number }>;
+  owner: { login: string; avatar_url: string };
+  comments: number;
+}
+
 /** Language name → bytes count, e.g. { "TypeScript": 48201, "CSS": 1234 } */
 export type GitHubLanguages = Record<string, number>;
 
@@ -108,6 +120,18 @@ export async function getUser(username: string): Promise<GitHubUser> {
   });
   if (!res.ok) throw new GitHubApiError(res.status, `User ${username} not found`);
   return res.json() as Promise<GitHubUser>;
+}
+
+/**
+ * GET /users/{username}/gists
+ */
+export async function getUserGists(username: string): Promise<GitHubGist[]> {
+  const res = await fetch(
+    `${GITHUB_API}/users/${username}/gists?per_page=100`,
+    { headers: githubHeaders(), next: { revalidate: 300 } }
+  );
+  if (!res.ok) throw new GitHubApiError(res.status, `Failed to fetch gists for ${username}`);
+  return res.json() as Promise<GitHubGist[]>;
 }
 
 /**

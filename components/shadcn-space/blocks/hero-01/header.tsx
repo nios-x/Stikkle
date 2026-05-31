@@ -123,8 +123,8 @@ const Header = ({ navigationData, className }: HeaderProps) => {
         {/* Logo */}
         <div>
           <a href="#">
-              <span className={ `text-3xl ${instrumentSerif.className} `}>Stikkle</span>
-            
+            <span className={`text-3xl  ${instrumentSerif.className} `}>Stikkle</span>
+
           </a>
         </div>
 
@@ -168,7 +168,7 @@ const Header = ({ navigationData, className }: HeaderProps) => {
                 className="w-full sm:w-96 p-0 border-l-0"
               >
                 <div className="flex items-center justify-between p-6">
-                  
+
                   <SheetClose id="mobile-menu-close">
                     <span className="rounded-full border border-border p-2.5 block">
                       <X width={16} height={16} />

@@ -1,0 +1,69 @@
+import { AppSidebar } from "@/components/app-sidebar"
+import { SiteHeader } from "@/components/site-header"
+import { GitHubReposTable } from "@/components/github-repos-table"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { UserProfileCard } from "@/components/dashboard-sections"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { getUser, getUserRepos } from "@/lib/github"
+import type { GitHubUser, GitHubRepo } from "@/lib/github"
+
+export default async function PublicRepoPage() {
+  const session = await getServerSession(authOptions)
+  const username: string | null =
+    (session?.user as { login?: string } | undefined)?.login ?? null
+
+  let githubUser: GitHubUser | null = null
+  let repos: GitHubRepo[] = []
+
+  if (username) {
+    try {
+      const [user, userRepos] = await Promise.all([
+        getUser(username),
+        getUserRepos(username),
+      ])
+      githubUser = user
+      repos = userRepos.filter(repo => !repo.private)
+    } catch (err) {
+      console.warn("[publicrepo] GitHub API error:", err)
+    }
+  }
+
+  const isSignedIn = !!username
+
+  return (
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader />
+        <div className="flex flex-1 flex-col p-4 md:p-8">
+          <div className="flex flex-col gap-1 mb-8">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">Public Repositories</h1>
+            <p className="text-muted-foreground text-lg">Browse and manage your public GitHub repositories.</p>
+          </div>
+
+          <div className="flex flex-col gap-6">
+            {isSignedIn && githubUser && (
+              <UserProfileCard user={githubUser} repos={repos} />
+            )}
+
+            {isSignedIn ? (
+              <GitHubReposTable repos={repos} username={username!} />
+            ) : (
+              <div className="flex items-center justify-center rounded-lg border border-dashed py-12 text-muted-foreground bg-background/50">
+                <p className="text-sm">Sign in with GitHub to see your public repositories</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  )
+}

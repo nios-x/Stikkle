@@ -14,6 +14,7 @@ import {
   GlobeIcon 
 } from "lucide-react";
 import Link from "next/link";
+import { PixelatedGradient } from "@/components/ui/pixelated-gradient";
 
 export default function ScrollHomepage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,8 +53,10 @@ export default function ScrollHomepage() {
     <div ref={containerRef} className="relative h-[400vh] w-full bg-background">
       <div className="sticky top-0 left-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden">
         
-        {/* Decorative background blur (always visible, gently pulsing) */}
-        <div className="pointer-events-none absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+        {/* Decorative animated pixelated gradient background */}
+        <div className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-30 mix-blend-screen">
+          <PixelatedGradient colors={["#3b82f6", "#8b5cf6", "#ec4899"]} pixelSize={32} />
+        </div>
 
         {/* ── Phase 1: Hero ── */}
         <motion.div

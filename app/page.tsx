@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import ScrollHomepage from "@/components/scroll-homepage";
 
-export default function page() {
+export default function Page() {
     const [cacheKey, setCacheKey] = useState(0);
 
     useEffect(() => {

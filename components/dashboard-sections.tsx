@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRightIcon, CircleCheckIcon, AlertCircleIcon, ClockIcon, GitBranchIcon } from "lucide-react"
 import Link from "next/link"
 import type { GitHubRepo, GitHubIssue, GitHubPR, GitHubUser } from "@/lib/github"
+import { NoiseBackground } from "@/components/ui/noise-background"
 
 
 // ── User Profile Card ──────────────────────────────────────────────────────────
@@ -22,8 +23,12 @@ export function UserProfileCard({ user, repos }: UserProfileCardProps) {
   const totalStars = repos.reduce((s, r) => s + r.stargazers_count, 0)
 
   return (
-    <Card className="@container/card overflow-hidden bg-gradient-to-br from-card to-muted/20">
-      <CardContent className="flex flex-col @md/card:flex-row items-center @md/card:items-start gap-6 p-6">
+    <Card className="@container/card overflow-hidden">
+      <NoiseBackground 
+        containerClassName="h-full w-full"
+        className="flex flex-col @md/card:flex-row items-center @md/card:items-start gap-6 p-6"
+        backdropBlur
+      >
         {/* Avatar */}
         <div className="relative shrink-0">
           <img
@@ -89,7 +94,7 @@ export function UserProfileCard({ user, repos }: UserProfileCardProps) {
             Edit Profile
           </Button>
         </div>
-      </CardContent>
+      </NoiseBackground>
     </Card>
   )
 }

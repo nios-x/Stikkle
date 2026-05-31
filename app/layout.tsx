@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "lenis/dist/lenis.css";
 import Header from "../components/shadcn-space/blocks/hero-01/header";
 import { getServerSession } from "next-auth";
 import Providers from "./providers";

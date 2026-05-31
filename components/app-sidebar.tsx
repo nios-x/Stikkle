@@ -18,7 +18,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, CameraIcon, FileTextIcon, Settings2Icon, CircleHelpIcon, SearchIcon, DatabaseIcon, FileChartColumnIcon, FileIcon, CommandIcon, SparklesIcon, ActivityIcon } from "lucide-react"
+import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, CameraIcon, FileTextIcon, Settings2Icon, CircleHelpIcon, SearchIcon, CommandIcon, SparklesIcon, ActivityIcon, FileCodeIcon, GlobeIcon, DatabaseIcon, FileChartColumnIcon, FileIcon } from "lucide-react"
 
 const navMain = [
   {
@@ -55,6 +55,16 @@ const navMain = [
     title: "Team",
     url: "/team",
     icon: <UsersIcon />,
+  },
+  {
+    title: "Gists",
+    url: "/gist",
+    icon: <FileCodeIcon />,
+  },
+  {
+    title: "Public Repos",
+    url: "/publicrepo",
+    icon: <GlobeIcon />,
   },
 ]
 
