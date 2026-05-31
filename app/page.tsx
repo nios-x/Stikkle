@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import AgencyHeroSection from "@/components/shadcn-space/blocks/hero-01/index";
+import ScrollHomepage from "@/components/scroll-homepage";
 
 export default function page() {
     const [cacheKey, setCacheKey] = useState(0);
@@ -17,6 +17,6 @@ export default function page() {
     }, []);
 
     return (
-        <AgencyHeroSection key={cacheKey} />
+        <ScrollHomepage key={cacheKey} />
     );
 }

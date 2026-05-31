@@ -254,9 +254,9 @@ export function ActivityContent({
             <button
               key={type}
               onClick={() => setFilter(isActive ? "all" : type)}
-              className={`group relative overflow-hidden rounded-xl border p-4 text-left transition-all duration-200 hover:shadow-md ${
+              className={`group relative overflow-hidden rounded-xl border p-4 text-left transition-all duration-200 hover:ring-1 ring-border/20 ${
                 isActive
-                  ? `${config.borderColor} ${config.bgColor} shadow-md`
+                  ? `${config.borderColor} ${config.bgColor} ring-1 ring-border/20`
                   : "border-border bg-card hover:border-primary/20"
               }`}
             >
@@ -436,7 +436,7 @@ function TimelineEventCard({ event, isLast }: { event: ActivityEvent; isLast: bo
         href={event.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="group block rounded-xl border bg-card p-4 transition-all duration-200 hover:border-primary/20 hover:shadow-md"
+        className="group block rounded-xl border bg-card p-4 transition-all duration-200 hover:border-primary/20 hover:ring-1 ring-border/20"
       >
         <div className="flex items-start gap-3">
           {/* Avatar */}

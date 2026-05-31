@@ -37,7 +37,7 @@ const PRIORITY_CONFIG = {
     borderColor: "border-red-200 dark:border-red-900/40",
     badgeClass: "border-red-200 bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400",
     icon: AlertCircleIcon,
-    glow: "shadow-red-500/10",
+    glow: "ring-1 ring-border/5",
   },
   high: {
     label: "High",
@@ -47,7 +47,7 @@ const PRIORITY_CONFIG = {
     borderColor: "border-orange-200 dark:border-orange-900/40",
     badgeClass: "border-orange-200 bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400",
     icon: AlertTriangleIcon,
-    glow: "shadow-orange-500/10",
+    glow: "ring-1 ring-border/5",
   },
   medium: {
     label: "Medium",
@@ -57,7 +57,7 @@ const PRIORITY_CONFIG = {
     borderColor: "border-blue-200 dark:border-blue-900/40",
     badgeClass: "border-blue-200 bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400",
     icon: ClockIcon,
-    glow: "shadow-blue-500/10",
+    glow: "ring-1 ring-border/5",
   },
   low: {
     label: "Low",
@@ -67,7 +67,7 @@ const PRIORITY_CONFIG = {
     borderColor: "border-green-200 dark:border-green-900/40",
     badgeClass: "border-green-200 bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-400",
     icon: CheckCircle2Icon,
-    glow: "shadow-green-500/10",
+    glow: "ring-1 ring-border/5",
   },
 }
 
@@ -217,9 +217,9 @@ export function RecommendationsContent({
             <button
               key={p}
               onClick={() => setPriorityFilter(isActive ? "all" : p)}
-              className={`group relative overflow-hidden rounded-xl border p-4 text-left transition-all duration-200 hover:shadow-md ${
+              className={`group relative overflow-hidden rounded-xl border p-4 text-left transition-all duration-200 hover:ring-1 ring-border/20 ${
                 isActive
-                  ? `${config.borderColor} ${config.bgColor} shadow-md ${config.glow}`
+                  ? `${config.borderColor} ${config.bgColor} ring-1 ring-border/20 ${config.glow}`
                   : "border-border bg-card hover:border-primary/20"
               }`}
             >
@@ -435,7 +435,7 @@ function RecommendationCard({
 
   return (
     <Card
-      className={`group transition-all duration-200 hover:shadow-md ${
+      className={`group transition-all duration-200 hover:ring-1 ring-border/20 ${
         isExpanded ? `${config.bgColor} ${config.borderColor}` : "hover:border-primary/20"
       }`}
     >
@@ -533,3 +533,4 @@ function RecommendationCard({
     </Card>
   )
 }
+
