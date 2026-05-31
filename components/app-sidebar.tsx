@@ -79,10 +79,10 @@ const navClouds = [
   },
 ]
 
-const navSecondary = [
+const navSecondary: any = [
 ]
 
-const documents = []
+const documents: any = []
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession()
