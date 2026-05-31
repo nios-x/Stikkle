@@ -16,10 +16,10 @@ export default function Providers({
     <ReactLenis root>
       <SessionProvider session={session}>
         <TooltipProvider>
-          <NoiseBackground 
-            className="min-h-full flex flex-col" 
+          <NoiseBackground
+            className="min-h-full flex flex-col"
             containerClassName="min-h-full"
-            noiseIntensity={0.05}
+            noiseIntensity={0.0}
           >
             {children}
           </NoiseBackground>

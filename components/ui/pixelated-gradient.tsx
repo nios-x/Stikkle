@@ -7,6 +7,7 @@ interface PixelatedGradientProps {
   colors?: string[];
   pixelSize?: number;
   speed?: number;
+  useMask?: boolean;
 }
 
 export function PixelatedGradient({
@@ -14,6 +15,7 @@ export function PixelatedGradient({
   colors = ["#4f46e5", "#ec4899", "#8b5cf6"], // Indigo, Pink, Violet
   pixelSize = 24, // Size of the "pixels"
   speed = 0.001,
+  useMask = true,
 }: PixelatedGradientProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>(0);
@@ -123,11 +125,15 @@ export function PixelatedGradient({
     <canvas
       ref={canvasRef}
       className={`absolute inset-0 h-full w-full pointer-events-none ${className}`}
-      style={{
-        // Using a mask image to fade out the top and bottom borders so there are no ugly cutoffs
-        maskImage: "linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)",
-        WebkitMaskImage: "linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)",
-      }}
+      style={
+        useMask
+          ? {
+              // Using a mask image to fade out the top and bottom borders so there are no ugly cutoffs
+              maskImage: "linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)",
+            }
+          : undefined
+      }
     />
   );
 }

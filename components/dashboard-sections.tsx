@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRightIcon, CircleCheckIcon, AlertCircleIcon, ClockIcon, GitBranchIcon } from "lucide-react"
 import Link from "next/link"
 import type { GitHubRepo, GitHubIssue, GitHubPR, GitHubUser } from "@/lib/github"
-import { NoiseBackground } from "@/components/ui/noise-background"
+import { PixelatedGradient } from "@/components/ui/pixelated-gradient"
 
 
 // ── User Profile Card ──────────────────────────────────────────────────────────
@@ -23,12 +23,15 @@ export function UserProfileCard({ user, repos }: UserProfileCardProps) {
   const totalStars = repos.reduce((s, r) => s + r.stargazers_count, 0)
 
   return (
-    <Card className="@container/card overflow-hidden">
-      <NoiseBackground 
-        containerClassName="h-full w-full"
-        className="flex flex-col @md/card:flex-row items-center @md/card:items-start gap-6 p-6"
-        backdropBlur
-      >
+    <Card className="@container/card overflow-hidden relative border border-border/50 bg-background/30 backdrop-blur-md">
+      <PixelatedGradient
+        colors={["#3b82f6", "#8b5cf6", "#ec4899"]}
+        pixelSize={32}
+        speed={0.002}
+        useMask={false}
+        className="opacity-5"
+      />
+      <div className="flex flex-col @md/card:flex-row items-center @md/card:items-start gap-6 p-6 relative z-10 w-full h-full">
         {/* Avatar */}
         <div className="relative shrink-0">
           <img
@@ -84,7 +87,7 @@ export function UserProfileCard({ user, repos }: UserProfileCardProps) {
         </div>
         
         {/* Link */}
-        <div className="flex @md/card:flex-col gap-2 shrink-0">
+        <div className="flex @md/card:flex-col gap-2 shrink-0 relative z-10">
           <Button asChild variant="default" className="border border-primary-foreground/10">
             <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="gap-2">
               View Profile <ArrowRightIcon className="size-4" />
@@ -94,7 +97,7 @@ export function UserProfileCard({ user, repos }: UserProfileCardProps) {
             Edit Profile
           </Button>
         </div>
-      </NoiseBackground>
+      </div>
     </Card>
   )
 }
@@ -111,71 +114,80 @@ export function RecentPRsCard({ prs, username }: RecentPRsCardProps) {
   const shown = prs.slice(0, 6)
 
   return (
-    <Card className="flex flex-col border border-border/50 border-t-4 border-t-purple-500">
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <CardTitle className="text-xl font-bold">Recent Pull Requests</CardTitle>
-            <CardDescription className="text-sm">
-              Work items for <span className="font-semibold text-foreground">@{username}</span>
-            </CardDescription>
-          </div>
-          <Badge variant="secondary" className="px-3 py-1 border-purple-200 bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
-            {prs.length} Open
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-1 flex-col gap-0 p-0">
-        {shown.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-3 py-16 text-muted-foreground bg-muted/5">
-            <div className="p-4 rounded-full bg-muted/10">
-              <CircleCheckIcon className="size-10 opacity-50" />
+    <Card className="flex flex-col border border-border/50 border-t-4 border-t-purple-500 overflow-hidden relative bg-background/30 backdrop-blur-md">
+      <PixelatedGradient
+        colors={["#3b82f6", "#8b5cf6", "#ec4899"]}
+        pixelSize={24}
+        speed={0.002}
+        useMask={false}
+        className="opacity-5"
+      />
+      <div className="relative z-10 flex flex-col flex-1 h-full w-full">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <CardTitle className="text-xl font-bold">Recent Pull Requests</CardTitle>
+              <CardDescription className="text-sm">
+                Work items for <span className="font-semibold text-foreground">@{username}</span>
+              </CardDescription>
             </div>
-            <p className="text-sm font-medium">No open pull requests</p>
+            <Badge variant="secondary" className="px-3 py-1 border-purple-200 bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+              {prs.length} Open
+            </Badge>
           </div>
-        ) : (
-          <ul className="divide-y divide-border/50">
-            {shown.map((pr) => (
-              <li key={pr.id}>
-                <a
-                  href={pr.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-start gap-4 px-6 py-4 transition-all hover:bg-muted/50"
-                >
-                  <div className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-xl bg-purple-100/80 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400 group-hover:scale-110 transition-transform">
-                    <GitBranchIcon className="size-4" />
-                  </div>
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <p className="truncate text-sm font-semibold leading-none group-hover:text-primary transition-colors">{pr.title}</p>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span className="font-mono text-purple-500/80">#{pr.number}</span>
-                      <span>·</span>
-                      <span>{new Date(pr.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
-                      <span>·</span>
-                      <span className="truncate max-w-[120px]">{pr.head.ref}</span>
-                      {pr.draft && (
-                        <Badge variant="outline" className="ml-1 px-1.5 py-0 text-[10px] uppercase font-bold tracking-wider">Draft</Badge>
-                      )}
+        </CardHeader>
+        <CardContent className="flex flex-1 flex-col gap-0 p-0">
+          {shown.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-3 py-16 text-muted-foreground bg-muted/5">
+              <div className="p-4 rounded-full bg-muted/10">
+                <CircleCheckIcon className="size-10 opacity-50" />
+              </div>
+              <p className="text-sm font-medium">No open pull requests</p>
+            </div>
+          ) : (
+            <ul className="divide-y divide-border/50">
+              {shown.map((pr) => (
+                <li key={pr.id}>
+                  <a
+                    href={pr.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-start gap-4 px-6 py-4 transition-all hover:bg-muted/50"
+                  >
+                    <div className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-xl bg-purple-100/80 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                      <GitBranchIcon className="size-4" />
                     </div>
-                  </div>
-                  <ArrowRightIcon className="mt-2 size-4 shrink-0 text-muted-foreground/50 group-hover:translate-x-1 group-hover:text-primary transition-all" />
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-        {prs.length > 6 && (
-          <div className="p-4 border-t bg-muted/5">
-            <Button asChild variant="ghost" className="w-full justify-between h-9 text-xs font-semibold hover:bg-muted/10">
-              <Link href="/activity">
-                <span>View all {prs.length} pull requests</span>
-                <ArrowRightIcon className="size-4" />
-              </Link>
-            </Button>
-          </div>
-        )}
-      </CardContent>
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <p className="truncate text-sm font-semibold leading-none group-hover:text-primary transition-colors">{pr.title}</p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span className="font-mono text-purple-500/80">#{pr.number}</span>
+                        <span>·</span>
+                        <span>{new Date(pr.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                        <span>·</span>
+                        <span className="truncate max-w-[120px]">{pr.head.ref}</span>
+                        {pr.draft && (
+                          <Badge variant="outline" className="ml-1 px-1.5 py-0 text-[10px] uppercase font-bold tracking-wider">Draft</Badge>
+                        )}
+                      </div>
+                    </div>
+                    <ArrowRightIcon className="mt-2 size-4 shrink-0 text-muted-foreground/50 group-hover:translate-x-1 group-hover:text-primary transition-all" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          {prs.length > 6 && (
+            <div className="p-4 border-t bg-muted/5">
+              <Button asChild variant="ghost" className="w-full justify-between h-9 text-xs font-semibold hover:bg-muted/10">
+                <Link href="/activity">
+                  <span>View all {prs.length} pull requests</span>
+                  <ArrowRightIcon className="size-4" />
+                </Link>
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </div>
     </Card>
   )
 }
@@ -203,84 +215,93 @@ export function OpenIssuesCard({ issues, username }: OpenIssuesCardProps) {
   const shown = issues.slice(0, 6)
 
   return (
-    <Card className="flex flex-col border border-border/50 border-t-4 border-t-green-500">
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <CardTitle className="text-xl font-bold">Open Issues</CardTitle>
-            <CardDescription className="text-sm">
-              Assigned or reported by <span className="font-semibold text-foreground">@{username}</span>
-            </CardDescription>
-          </div>
-          <Badge variant="secondary" className="px-3 py-1 border-green-200 bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300">
-            {issues.length > 0 ? `${issues.length} Open` : "Clear"}
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-1 flex-col gap-0 p-0">
-        {shown.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-3 py-16 text-muted-foreground bg-muted/5">
-            <div className="p-4 rounded-full bg-muted/10">
-              <CircleCheckIcon className="size-10 opacity-50 text-green-500" />
+    <Card className="flex flex-col border border-border/50 border-t-4 border-t-green-500 overflow-hidden relative bg-background/30 backdrop-blur-md">
+      <PixelatedGradient
+        colors={["#3b82f6", "#8b5cf6", "#ec4899"]}
+        pixelSize={24}
+        speed={0.002}
+        useMask={false}
+        className="opacity-5"
+      />
+      <div className="relative z-10 flex flex-col flex-1 h-full w-full">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <CardTitle className="text-xl font-bold">Open Issues</CardTitle>
+              <CardDescription className="text-sm">
+                Assigned or reported by <span className="font-semibold text-foreground">@{username}</span>
+              </CardDescription>
             </div>
-            <p className="text-sm font-medium">All clear! No open issues.</p>
+            <Badge variant="secondary" className="px-3 py-1 border-green-200 bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+              {issues.length > 0 ? `${issues.length} Open` : "Clear"}
+            </Badge>
           </div>
-        ) : (
-          <ul className="divide-y divide-border/50">
-            {shown.map((issue) => (
-              <li key={issue.id}>
-                <a
-                  href={issue.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-start gap-4 px-6 py-4 transition-all hover:bg-muted/50"
-                >
-                  <div className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-xl bg-green-100/80 text-green-600 dark:bg-green-900/30 dark:text-green-400 group-hover:scale-110 transition-transform">
-                    <AlertCircleIcon className="size-4" />
-                  </div>
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <p className="truncate text-sm font-semibold leading-none group-hover:text-primary transition-colors">{issue.title}</p>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                      <span className="font-mono text-green-600/80 font-bold">#{issue.number}</span>
-                      <span>·</span>
-                      <span>{new Date(issue.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
-                      {issue.comments > 0 && (
-                        <>
-                          <span>·</span>
-                          <span className="flex items-center gap-1">
-                            {issue.comments} 💬
-                          </span>
-                        </>
-                      )}
-                      <div className="flex gap-1 ml-1">
-                        {issue.labels?.slice(0, 2).map((label) => (
-                          <span
-                            key={label.id}
-                            className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${LABEL_STYLES[label.name.toLowerCase()] ?? "bg-muted text-muted-foreground"}`}
-                          >
-                            {label.name}
-                          </span>
-                        ))}
+        </CardHeader>
+        <CardContent className="flex flex-1 flex-col gap-0 p-0">
+          {shown.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-3 py-16 text-muted-foreground bg-muted/5">
+              <div className="p-4 rounded-full bg-muted/10">
+                <CircleCheckIcon className="size-10 opacity-50 text-green-500" />
+              </div>
+              <p className="text-sm font-medium">All clear! No open issues.</p>
+            </div>
+          ) : (
+            <ul className="divide-y divide-border/50">
+              {shown.map((issue) => (
+                <li key={issue.id}>
+                  <a
+                    href={issue.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-start gap-4 px-6 py-4 transition-all hover:bg-muted/50"
+                  >
+                    <div className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-xl bg-green-100/80 text-green-600 dark:bg-green-900/30 dark:text-green-400 group-hover:scale-110 transition-transform">
+                      <AlertCircleIcon className="size-4" />
+                    </div>
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <p className="truncate text-sm font-semibold leading-none group-hover:text-primary transition-colors">{issue.title}</p>
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                        <span className="font-mono text-green-600/80 font-bold">#{issue.number}</span>
+                        <span>·</span>
+                        <span>{new Date(issue.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                        {issue.comments > 0 && (
+                          <>
+                            <span>·</span>
+                            <span className="flex items-center gap-1">
+                              {issue.comments} 💬
+                            </span>
+                          </>
+                        )}
+                        <div className="flex gap-1 ml-1">
+                          {issue.labels?.slice(0, 2).map((label) => (
+                            <span
+                              key={label.id}
+                              className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${LABEL_STYLES[label.name.toLowerCase()] ?? "bg-muted text-muted-foreground"}`}
+                            >
+                              {label.name}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <ArrowRightIcon className="mt-2 size-4 shrink-0 text-muted-foreground/50 group-hover:translate-x-1 group-hover:text-primary transition-all" />
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-        {issues.length > 6 && (
-          <div className="p-4 border-t bg-muted/5">
-            <Button asChild variant="ghost" className="w-full justify-between h-9 text-xs font-semibold hover:bg-muted/10">
-              <Link href="/activity">
-                <span>View all {issues.length} issues</span>
-                <ArrowRightIcon className="size-4" />
-              </Link>
-            </Button>
-          </div>
-        )}
-      </CardContent>
+                    <ArrowRightIcon className="mt-2 size-4 shrink-0 text-muted-foreground/50 group-hover:translate-x-1 group-hover:text-primary transition-all" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          {issues.length > 6 && (
+            <div className="p-4 border-t bg-muted/5">
+              <Button asChild variant="ghost" className="w-full justify-between h-9 text-xs font-semibold hover:bg-muted/10">
+                <Link href="/activity">
+                  <span>View all {issues.length} issues</span>
+                  <ArrowRightIcon className="size-4" />
+                </Link>
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </div>
     </Card>
   )
 }
@@ -383,75 +404,84 @@ export function ActivityFeedCard({ repos, issues, prs }: ActivityFeedCardProps) 
   }
 
   return (
-    <Card className="flex flex-col border border-border/50">
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <CardTitle className="text-xl font-bold flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              Activity Feed
-            </CardTitle>
-            <CardDescription className="text-sm">Latest updates from your repositories</CardDescription>
+    <Card className="flex flex-col border border-border/50 overflow-hidden relative bg-background/30 backdrop-blur-md">
+      <PixelatedGradient
+        colors={["#3b82f6", "#8b5cf6", "#ec4899"]}
+        pixelSize={24}
+        speed={0.002}
+        useMask={false}
+        className="opacity-5"
+      />
+      <div className="relative z-10 flex flex-col flex-1 h-full w-full">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <CardTitle className="text-xl font-bold flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                Activity Feed
+              </CardTitle>
+              <CardDescription className="text-sm">Latest updates from your repositories</CardDescription>
+            </div>
+            <Badge variant="outline" className="font-mono text-[10px] tracking-tighter">
+              LIVE
+            </Badge>
           </div>
-          <Badge variant="outline" className="font-mono text-[10px] tracking-tighter">
-            LIVE
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-1 flex-col gap-0 p-0">
-        {shown.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-3 py-16 text-muted-foreground bg-muted/5">
-            <ClockIcon className="size-10 opacity-30" />
-            <p className="text-sm font-medium">No recent activity</p>
-          </div>
-        ) : (
-          <ul className="divide-y divide-border/50">
-            {shown.map((item) => (
-              <li key={item.id} className="relative group">
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-4 px-6 py-4 transition-all hover:bg-muted/50"
-                >
-                  {/* Avatar or icon */}
-                  <div className="relative shrink-0 transition-transform group-hover:scale-110">
-                    {item.avatarUrl ? (
-                      <img src={item.avatarUrl} alt="" className="size-8 rounded-xl object-cover ring-2 ring-background border border-border/20" />
-                    ) : (
-                      <div className={cn("flex size-8 items-center justify-center rounded-xl border border-border/20", iconBg[item.icon])}>
-                        <AlertCircleIcon className={cn("size-4", iconColor[item.icon])} />
+        </CardHeader>
+        <CardContent className="flex flex-1 flex-col gap-0 p-0">
+          {shown.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-3 py-16 text-muted-foreground bg-muted/5">
+              <ClockIcon className="size-10 opacity-30" />
+              <p className="text-sm font-medium">No recent activity</p>
+            </div>
+          ) : (
+            <ul className="divide-y divide-border/50">
+              {shown.map((item) => (
+                <li key={item.id} className="relative group">
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-4 px-6 py-4 transition-all hover:bg-muted/50"
+                  >
+                    {/* Avatar or icon */}
+                    <div className="relative shrink-0 transition-transform group-hover:scale-110">
+                      {item.avatarUrl ? (
+                        <img src={item.avatarUrl} alt="" className="size-8 rounded-xl object-cover ring-2 ring-background border border-border/20" />
+                      ) : (
+                        <div className={cn("flex size-8 items-center justify-center rounded-xl border border-border/20", iconBg[item.icon])}>
+                          <AlertCircleIcon className={cn("size-4", iconColor[item.icon])} />
+                        </div>
+                      )}
+                      <div className={cn("absolute -bottom-1 -right-1 size-3.5 rounded-full border-2 border-background border border-border/20", iconBg[item.icon])}>
+                        {/* Sub-icon or indicator could go here */}
                       </div>
-                    )}
-                    <div className={cn("absolute -bottom-1 -right-1 size-3.5 rounded-full border-2 border-background border border-border/20", iconBg[item.icon])}>
-                      {/* Sub-icon or indicator could go here */}
                     </div>
-                  </div>
-                  
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <p className="truncate text-sm font-semibold leading-none group-hover:text-primary transition-colors">{item.title}</p>
-                      <span className="shrink-0 text-[10px] font-bold uppercase tracking-tight text-muted-foreground/60">{getRelativeTime(item.time)}</span>
+                    
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <p className="truncate text-sm font-semibold leading-none group-hover:text-primary transition-colors">{item.title}</p>
+                        <span className="shrink-0 text-[10px] font-bold uppercase tracking-tight text-muted-foreground/60">{getRelativeTime(item.time)}</span>
+                      </div>
+                      <p className="mt-1.5 truncate text-xs text-muted-foreground leading-relaxed">{item.description}</p>
                     </div>
-                    <p className="mt-1.5 truncate text-xs text-muted-foreground leading-relaxed">{item.description}</p>
-                  </div>
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-        <div className="p-4 border-t bg-muted/5">
-          <Button asChild variant="ghost" className="w-full justify-center h-9 text-xs font-semibold hover:bg-muted/10 gap-2">
-            <Link href="/activity">
-              <span>View Full Timeline</span>
-              <ArrowRightIcon className="size-4" />
-            </Link>
-          </Button>
-        </div>
-      </CardContent>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="p-4 border-t bg-muted/5">
+            <Button asChild variant="ghost" className="w-full justify-center h-9 text-xs font-semibold hover:bg-muted/10 gap-2">
+              <Link href="/activity">
+                <span>View Full Timeline</span>
+                <ArrowRightIcon className="size-4" />
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </div>
     </Card>
   )
 }

@@ -116,7 +116,7 @@ const Header = ({ navigationData, className }: HeaderProps) => {
         className={cn(
           "w-full max-w-6xl flex items-center h-fit justify-between gap-3.5 lg:gap-6 transition-all duration-500",
           sticky
-            ? "p-2.5 bg-background/60 backdrop-blur-lg border border-border/40 shadow-2xl shadow-primary/5 rounded-full"
+            ? "p-2.5 bg-background border border-border/40 shadow-2xl shadow-primary/5 rounded-full"
             : "bg-transparent border-transparent",
         )}
       >

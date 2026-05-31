@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Pie, PieChart } from "recharts"
+import { PixelatedGradient } from "@/components/ui/pixelated-gradient"
 
 import {
   Card,
@@ -99,128 +100,146 @@ export function ChartAreaInteractive({ repos }: ChartAreaInteractiveProps) {
 
   if (repos.length === 0) {
     return (
-      <Card className="@container/card">
-        <CardHeader>
-          <CardTitle>GitHub Activity</CardTitle>
-          <CardDescription>Sign in to see your repository analytics</CardDescription>
-        </CardHeader>
-        <CardContent className="flex items-center justify-center py-16 text-muted-foreground">
-          <p className="text-sm">No repository data available yet</p>
-        </CardContent>
+      <Card className="@container/card overflow-hidden relative border border-border/50 bg-background/30 backdrop-blur-md">
+        <PixelatedGradient
+          colors={["#3b82f6", "#8b5cf6", "#ec4899"]}
+          pixelSize={32}
+          speed={0.002}
+          useMask={false}
+          className="opacity-5"
+        />
+        <div className="relative z-10 flex flex-col h-full w-full">
+          <CardHeader>
+            <CardTitle>GitHub Activity</CardTitle>
+            <CardDescription>Sign in to see your repository analytics</CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center py-16 text-muted-foreground">
+            <p className="text-sm">No repository data available yet</p>
+          </CardContent>
+        </div>
       </Card>
     )
   }
 
   return (
-    <Card className="@container/card">
-      <CardHeader>
-        <CardTitle>{cur.title}</CardTitle>
-        <CardDescription>
-          <span className="hidden @[540px]/card:block">{cur.description}</span>
-          <span className="@[540px]/card:hidden">Repository analytics</span>
-        </CardDescription>
-        <CardAction>
-          <Select value={view} onValueChange={setView}>
-            <SelectTrigger
-              className="flex w-44 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
-              size="sm"
-              aria-label="Select chart view"
-            >
-              <SelectValue placeholder="Stars & Forks" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="stars" className="rounded-lg">Stars & Forks</SelectItem>
-              <SelectItem value="languages" className="rounded-lg">Languages</SelectItem>
-              <SelectItem value="activity" className="rounded-lg">Recent Activity</SelectItem>
-            </SelectContent>
-          </Select>
-        </CardAction>
-      </CardHeader>
-      <CardContent className="px-2 pt-2 sm:px-6 sm:pt-4">
+    <Card className="@container/card overflow-hidden relative border border-border/50 bg-background/30 backdrop-blur-md">
+      <PixelatedGradient
+        colors={["#3b82f6", "#8b5cf6", "#ec4899"]}
+        pixelSize={32}
+        speed={0.002}
+        useMask={false}
+        className="opacity-5"
+      />
+      <div className="relative z-10 flex flex-col h-full w-full">
+        <CardHeader>
+          <CardTitle>{cur.title}</CardTitle>
+          <CardDescription>
+            <span className="hidden @[540px]/card:block">{cur.description}</span>
+            <span className="@[540px]/card:hidden">Repository analytics</span>
+          </CardDescription>
+          <CardAction>
+            <Select value={view} onValueChange={setView}>
+              <SelectTrigger
+                className="flex w-44 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
+                size="sm"
+                aria-label="Select chart view"
+              >
+                <SelectValue placeholder="Stars & Forks" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                <SelectItem value="stars" className="rounded-lg">Stars & Forks</SelectItem>
+                <SelectItem value="languages" className="rounded-lg">Languages</SelectItem>
+                <SelectItem value="activity" className="rounded-lg">Recent Activity</SelectItem>
+              </SelectContent>
+            </Select>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="px-2 pt-2 sm:px-6 sm:pt-4">
 
-        {/* ── Stars & Forks bar chart ─────────────────────────────────────── */}
-        {view === "stars" && (
-          <>
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={starsData} margin={{ left: -10, right: 4, top: 4, bottom: 0 }} barGap={4}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} tickMargin={8} />
-                <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
-                <Tooltip
-                  cursor={{ fill: "hsl(var(--muted))", radius: 4 }}
-                  contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "8px", fontSize: 12 }}
-                />
-                <Bar dataKey="stars" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} maxBarSize={36} name="Stars" />
-                <Bar dataKey="forks" fill="hsl(var(--primary) / 0.3)" radius={[4, 4, 0, 0]} maxBarSize={36} name="Forks" />
-              </BarChart>
-            </ResponsiveContainer>
-            <div className="mt-2 flex items-center justify-center gap-4 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-primary" />Stars</span>
-              <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-primary/30" />Forks</span>
+          {/* ── Stars & Forks bar chart ─────────────────────────────────────── */}
+          {view === "stars" && (
+            <>
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={starsData} margin={{ left: -10, right: 4, top: 4, bottom: 0 }} barGap={4}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                  <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} tickMargin={8} />
+                  <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                  <Tooltip
+                    cursor={{ fill: "hsl(var(--muted))", radius: 4 }}
+                    contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "8px", fontSize: 12 }}
+                  />
+                  <Bar dataKey="stars" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} maxBarSize={36} name="Stars" />
+                  <Bar dataKey="forks" fill="hsl(var(--primary) / 0.3)" radius={[4, 4, 0, 0]} maxBarSize={36} name="Forks" />
+                </BarChart>
+              </ResponsiveContainer>
+              <div className="mt-2 flex items-center justify-center gap-4 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-primary" />Stars</span>
+                <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-primary/30" />Forks</span>
+              </div>
+            </>
+          )}
+
+          {/* ── Language pie chart ───────────────────────────────────────────── */}
+          {view === "languages" && (
+            <div className="flex flex-col items-center gap-4 @[540px]/card:flex-row @[540px]/card:gap-8">
+              <ResponsiveContainer width="100%" height={260}>
+                <PieChart>
+                  <Pie
+                    data={langData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={100}
+                    paddingAngle={3}
+                    dataKey="value"
+                    stroke="none"
+                  >
+                    {langData.map((entry, idx) => (
+                      <Cell key={entry.name} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "8px", fontSize: 12 }}
+                    formatter={(value, name) => [`${value} repos`, name]}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs">
+                {langData.map((lang) => (
+                  <span key={lang.name} className="flex items-center gap-1.5 whitespace-nowrap">
+                    <span className="inline-block size-2.5 rounded-full" style={{ backgroundColor: lang.fill }} />
+                    {lang.name} <span className="text-muted-foreground">({lang.value})</span>
+                  </span>
+                ))}
+              </div>
             </div>
-          </>
-        )}
+          )}
 
-        {/* ── Language pie chart ───────────────────────────────────────────── */}
-        {view === "languages" && (
-          <div className="flex flex-col items-center gap-4 @[540px]/card:flex-row @[540px]/card:gap-8">
-            <ResponsiveContainer width="100%" height={260}>
-              <PieChart>
-                <Pie
-                  data={langData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={55}
-                  outerRadius={100}
-                  paddingAngle={3}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {langData.map((entry, idx) => (
-                    <Cell key={entry.name} fill={entry.fill} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "8px", fontSize: 12 }}
-                  formatter={(value, name) => [`${value} repos`, name]}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs">
-              {langData.map((lang) => (
-                <span key={lang.name} className="flex items-center gap-1.5 whitespace-nowrap">
-                  <span className="inline-block size-2.5 rounded-full" style={{ backgroundColor: lang.fill }} />
-                  {lang.name} <span className="text-muted-foreground">({lang.value})</span>
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
+          {/* ── Activity bar chart ──────────────────────────────────────────── */}
+          {view === "activity" && (
+            <>
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={activityData} margin={{ left: -10, right: 4, top: 4, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                  <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} tickMargin={8} />
+                  <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                  <Tooltip
+                    cursor={{ fill: "hsl(var(--muted))", radius: 4 }}
+                    contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "8px", fontSize: 12 }}
+                  />
+                  <Bar dataKey="issues" fill="#ef4444" radius={[4, 4, 0, 0]} maxBarSize={36} name="Open Issues" />
+                  <Bar dataKey="stars" fill="#eab308" radius={[4, 4, 0, 0]} maxBarSize={36} name="Stars" />
+                </BarChart>
+              </ResponsiveContainer>
+              <div className="mt-2 flex items-center justify-center gap-4 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-red-500" />Open Issues</span>
+                <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-yellow-500" />Stars</span>
+              </div>
+            </>
+          )}
 
-        {/* ── Activity bar chart ──────────────────────────────────────────── */}
-        {view === "activity" && (
-          <>
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={activityData} margin={{ left: -10, right: 4, top: 4, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} tickMargin={8} />
-                <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
-                <Tooltip
-                  cursor={{ fill: "hsl(var(--muted))", radius: 4 }}
-                  contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "8px", fontSize: 12 }}
-                />
-                <Bar dataKey="issues" fill="#ef4444" radius={[4, 4, 0, 0]} maxBarSize={36} name="Open Issues" />
-                <Bar dataKey="stars" fill="#eab308" radius={[4, 4, 0, 0]} maxBarSize={36} name="Stars" />
-              </BarChart>
-            </ResponsiveContainer>
-            <div className="mt-2 flex items-center justify-center gap-4 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-red-500" />Open Issues</span>
-              <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-yellow-500" />Stars</span>
-            </div>
-          </>
-        )}
-
-      </CardContent>
+        </CardContent>
+      </div>
     </Card>
   )
 }

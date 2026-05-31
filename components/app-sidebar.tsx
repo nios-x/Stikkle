@@ -37,26 +37,6 @@ const navMain = [
     icon: <ActivityIcon />,
   },
   {
-    title: "Lifecycle",
-    url: "/lifecycle",
-    icon: <ListIcon />,
-  },
-  {
-    title: "Analytics",
-    url: "/analytics",
-    icon: <ChartBarIcon />,
-  },
-  {
-    title: "Projects",
-    url: "/projects",
-    icon: <FolderIcon />,
-  },
-  {
-    title: "Team",
-    url: "/team",
-    icon: <UsersIcon />,
-  },
-  {
     title: "Gists",
     url: "/gist",
     icon: <FileCodeIcon />,
@@ -100,16 +80,9 @@ const navClouds = [
 ]
 
 const navSecondary = [
-  { title: "Settings", url: "/settings", icon: <Settings2Icon /> },
-  { title: "Get Help", url: "/help", icon: <CircleHelpIcon /> },
-  { title: "Search", url: "/search", icon: <SearchIcon /> },
 ]
 
-const documents = [
-  { name: "Data Library", url: "/data-library", icon: <DatabaseIcon /> },
-  { name: "Reports", url: "/reports", icon: <FileChartColumnIcon /> },
-  { name: "Word Assistant", url: "/word-assistant", icon: <FileIcon /> },
-]
+const documents = []
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession()
