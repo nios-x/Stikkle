@@ -66,19 +66,19 @@ function HeroSection({ avatarList }: HeroSectionProps) {
                   Stikkle is a cutting-edge open-source platform designed to empower developers and organizations to build, deploy, and manage applications with unparalleled ease and efficiency.
                 </motion.p>
                 <motion.div
-                  initial={{ opacity: 0, y: 32 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 1, delay: 0.2, ease: "easeInOut" }}
                   className="flex items-center flex-col md:flex-row justify-center gap-8"
                 >
                   <Button
-                    className="relative text-sm font-medium rounded-full h-12 p-1 ps-6 pe-14 group transition-all duration-500 hover:ps-14 hover:pe-6 w-fit overflow-hidden cursor-pointer"
+                    className="relative text-sm font-medium rounded-full h-12 py-1 group transition-all duration-500 w-fit overflow-hidden cursor-pointer"
+                    style={{ paddingLeft: '1.5rem', paddingRight: '3.5rem' }}
                     onClick={handleGetStarted}
+                    onMouseEnter={(e) => { e.currentTarget.style.paddingLeft = '3.5rem'; e.currentTarget.style.paddingRight = '1.5rem'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.paddingLeft = '1.5rem'; e.currentTarget.style.paddingRight = '3.5rem'; }}
                   >
-                    <span className="relative z-10 transition-all duration-500">
+                    <span className="relative z-10 transition-all duration-500 whitespace-nowrap">
                       Get Started
                     </span>
-                    <span className="absolute right-1 w-10 h-10 bg-background text-foreground rounded-full flex items-center justify-center transition-all duration-500 group-hover:right-[calc(100%-44px)] group-hover:rotate-45">
+                    <span className="">
                       <ArrowUpRight size={16} />
                     </span>
                   </Button>

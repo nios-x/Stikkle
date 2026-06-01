@@ -169,7 +169,7 @@ export const NoiseBackground = ({
     <div
       ref={containerRef}
       className={cn(
-        "group relative overflow-hidden",
+        "group relative overflow-clip",
         backdropBlur &&
         "after:absolute after:inset-0 after:h-full after:w-full after:backdrop-blur-lg after:content-['']",
         containerClassName,

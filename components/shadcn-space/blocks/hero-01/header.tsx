@@ -46,14 +46,17 @@ const CollaborateButton = ({ className }: { className?: string }) => {
     <div className={cn("flex items-center gap-3", className)}>
       <Button
         className={cn(
-          "relative text-sm font-medium rounded-full h-10 p-1 ps-4 pe-12 group transition-all duration-500 hover:ps-12 hover:pe-4 w-fit overflow-hidden",
+          "relative text-sm font-medium rounded-full h-10 py-1 group transition-all duration-500 w-fit overflow-hidden whitespace-nowrap",
           isSignedIn ? "cursor-default opacity-80" : "cursor-pointer",
         )}
+        style={{ paddingLeft: '1.25rem', paddingRight: '3.5rem' }}
         type="button"
         onClick={!isSignedIn ? () => signIn("github") : undefined}
         disabled={isSignedIn}
+        onMouseEnter={!isSignedIn ? (e) => { e.currentTarget.style.paddingLeft = '3.5rem'; e.currentTarget.style.paddingRight = '1.25rem'; } : undefined}
+        onMouseLeave={!isSignedIn ? (e) => { e.currentTarget.style.paddingLeft = '1.25rem'; e.currentTarget.style.paddingRight = '3.5rem'; } : undefined}
       >
-        <span className="relative z-10 flex items-center gap-2 transition-all duration-500">
+        <span className="relative z-10 flex items-center gap-2 transition-all duration-500 whitespace-nowrap">
           {isSignedIn && userImage ? (
             <img
               src={userImage}
@@ -64,7 +67,7 @@ const CollaborateButton = ({ className }: { className?: string }) => {
           {isSignedIn ? userName : "Sign In with Github"}
         </span>
         {!isSignedIn ? (
-          <span className="absolute right-1 w-8 h-8 bg-background text-foreground rounded-full flex items-center justify-center transition-all duration-500 group-hover:right-[calc(100%-36px)] group-hover:rotate-45">
+          <span className="">
             <ArrowUpRight size={16} />
           </span>
         ) : null}

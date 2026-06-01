@@ -4,14 +4,14 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import AgencyHeroSection from "@/components/shadcn-space/blocks/hero-01/index";
 import { Button } from "@/components/ui/button";
-import { 
-  ArrowRightIcon, 
-  LayersIcon, 
-  ZapIcon, 
-  ShieldCheckIcon, 
-  SparklesIcon, 
-  CodeIcon, 
-  GlobeIcon 
+import {
+  ArrowRightIcon,
+  LayersIcon,
+  ZapIcon,
+  ShieldCheckIcon,
+  SparklesIcon,
+  CodeIcon,
+  GlobeIcon
 } from "lucide-react";
 import Link from "next/link";
 import { PixelatedGradient } from "@/components/ui/pixelated-gradient";
@@ -52,9 +52,9 @@ export default function ScrollHomepage() {
   return (
     <div ref={containerRef} className="relative h-[400vh] w-full bg-background">
       <div className="sticky top-0 left-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden">
-        
+
         {/* Decorative animated pixelated gradient background */}
-        <div className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-30 mix-blend-screen">
+        <div className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-70 mix-blend-screen">
           <PixelatedGradient colors={["#3b82f6", "#8b5cf6", "#ec4899"]} pixelSize={32} />
         </div>
 
@@ -71,7 +71,7 @@ export default function ScrollHomepage() {
         {/* ── Phase 2: Features ── */}
         <motion.div
           style={{ opacity: featuresOpacity, y: featuresY, scale: featuresScale, pointerEvents: featuresPointerEvents }}
-          className="absolute inset-0 flex items-center justify-center px-6"
+          className="absolute inset-0 flex items-center bg-white/95 justify-center px-6"
         >
           <div className="container mx-auto max-w-6xl">
             <div className="mb-12 text-center">
@@ -85,7 +85,7 @@ export default function ScrollHomepage() {
                 Stikkle provides a comprehensive suite of tools designed to help teams collaborate, ship faster, and maintain perfect stability.
               </p>
             </div>
-            
+
             <div className="grid gap-6 md:grid-cols-3">
               {[
                 { icon: ZapIcon, title: "Lightning Fast", desc: "Optimized workflows that cut compilation and deployment times by up to 50%." },
@@ -107,17 +107,17 @@ export default function ScrollHomepage() {
         {/* ── Phase 3: Showcase ── */}
         <motion.div
           style={{ opacity: showcaseOpacity, y: showcaseY, pointerEvents: showcasePointerEvents }}
-          className="absolute inset-0 flex flex-col items-center justify-center px-6"
+          className="absolute bg-white inset-0 flex flex-col items-center justify-center px-6"
         >
           <div className="mb-10 text-center">
-             <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
-                Command your infrastructure
-              </h2>
-              <p className="mt-3 text-lg text-muted-foreground">
-                A unified dashboard that gives you x-ray vision into your projects.
-              </p>
+            <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
+              Command your infrastructure
+            </h2>
+            <p className="mt-3 text-lg text-muted-foreground">
+              A unified dashboard that gives you x-ray vision into your projects.
+            </p>
           </div>
-          
+
           <div className="relative w-full max-w-5xl overflow-hidden rounded-2xl border border-border/50 bg-background/50 shadow-2xl backdrop-blur-sm">
             {/* Window controls mockup */}
             <div className="flex items-center gap-2 border-b bg-muted/30 px-4 py-3">
@@ -154,7 +154,7 @@ export default function ScrollHomepage() {
           <div className="relative overflow-hidden rounded-3xl border bg-card p-10 md:p-20 text-center shadow-2xl w-full max-w-4xl">
             <div className="absolute top-0 right-0 -mt-16 -mr-16 size-64 rounded-full bg-primary/20 blur-3xl" />
             <div className="absolute bottom-0 left-0 -mb-16 -ml-16 size-48 rounded-full bg-blue-500/20 blur-3xl" />
-            
+
             <div className="relative z-10 flex flex-col items-center">
               <div className="mb-6 inline-flex rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
                 Ready to transform your workflow?
@@ -165,7 +165,7 @@ export default function ScrollHomepage() {
               <p className="mb-10 max-w-xl text-xl text-muted-foreground">
                 Join thousands of developers who are shipping faster, collaborating better, and building the future.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="h-14 rounded-full px-8 text-base shadow-lg shadow-primary/20" asChild>
                   <Link href="/dashboard">
