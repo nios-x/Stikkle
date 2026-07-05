@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 type Theme = "dark" | "light";
 
@@ -13,19 +13,31 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
+  const [mounted, setMounted] = useState(false);
 
+  // On mount, read from localStorage or default to dark
   useEffect(() => {
-    const root = window.document.documentElement;
+    const stored = localStorage.getItem("stikkle-theme") as Theme | null;
+    const initial = stored || "dark";
+    setTheme(initial);
+    setMounted(true);
+  }, []);
+
+  // Sync the dark class on <html> whenever theme changes (only after mount)
+  useEffect(() => {
+    if (!mounted) return;
+    const root = document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
     } else {
       root.classList.remove("dark");
     }
-  }, [theme]);
+    localStorage.setItem("stikkle-theme", theme);
+  }, [theme, mounted]);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
