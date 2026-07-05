@@ -13,6 +13,8 @@ import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { Instrument_Serif } from "next/font/google";
 
+import { useRouter, usePathname } from "next/navigation";
+
 // Font loader must be called at module scope per Next.js requirements
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -35,6 +37,7 @@ type HeaderProps = {
 
 const CollaborateButton = ({ className }: { className?: string }) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const userName =
     session?.user?.name ??
     session?.user?.email?.split("@")[0] ??
@@ -51,7 +54,7 @@ const CollaborateButton = ({ className }: { className?: string }) => {
         )}
         style={{ paddingLeft: '1.25rem', paddingRight: '3.5rem' }}
         type="button"
-        onClick={!isSignedIn ? () => signIn("github") : undefined}
+        onClick={!isSignedIn ? () => router.push("/auth") : undefined}
         disabled={isSignedIn}
         onMouseEnter={!isSignedIn ? (e) => { e.currentTarget.style.paddingLeft = '3.5rem'; e.currentTarget.style.paddingRight = '1.25rem'; } : undefined}
         onMouseLeave={!isSignedIn ? (e) => { e.currentTarget.style.paddingLeft = '1.25rem'; e.currentTarget.style.paddingRight = '3.5rem'; } : undefined}
@@ -87,8 +90,19 @@ const CollaborateButton = ({ className }: { className?: string }) => {
 };
 
 const Header = ({ navigationData, className }: HeaderProps) => {
+  const pathname = usePathname();
   const [sticky, setSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const isDashboardPage = pathname === "/dashboard" || 
+                          pathname.startsWith("/dashboard/") ||
+                          pathname === "/activity" ||
+                          pathname === "/recommendation" ||
+                          pathname === "/gist" ||
+                          pathname === "/publicrepo" ||
+                          pathname === "/settings";
+
+  if (isDashboardPage) return null;
 
   const handleScroll = useCallback(() => {
     setSticky(window.scrollY >= 50);

@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ReactLenis } from "lenis/react";
 import { NoiseBackground } from "@/components/ui/noise-background";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export default function Providers({
   children,
@@ -15,15 +16,17 @@ export default function Providers({
   return (
     <ReactLenis root>
       <SessionProvider session={session}>
-        <TooltipProvider>
-          <NoiseBackground
-            className="min-h-full flex flex-col"
-            containerClassName="min-h-full"
-            noiseIntensity={0.0}
-          >
-            {children}
-          </NoiseBackground>
-        </TooltipProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            <NoiseBackground
+              className="min-h-full flex flex-col transition-colors duration-300"
+              containerClassName="min-h-full"
+              noiseIntensity={0.0}
+            >
+              {children}
+            </NoiseBackground>
+          </TooltipProvider>
+        </ThemeProvider>
       </SessionProvider>
     </ReactLenis>
   );

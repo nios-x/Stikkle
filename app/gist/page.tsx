@@ -7,32 +7,41 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getUser, getUserGists, getUserRepos } from "@/lib/github"
 import type { GitHubUser, GitHubGist, GitHubRepo } from "@/lib/github"
+import { redirect } from "next/navigation"
 
 export default async function GistPage() {
   const session = await getServerSession(authOptions)
   const username: string | null =
-    (session?.user as { login?: string } | undefined)?.login ?? null
+    (session?.user as { login?: string } | undefined)?.login ??
+    session?.user?.name?.replace(/\s+/g, "") ??
+    (session?.user?.email ? session.user.email.split("@")[0] : null) ??
+    null
+
+  const hasConnectedGithub = !!username
+
+  if (!hasConnectedGithub) {
+    redirect("/auth")
+  }
 
   let githubUser: GitHubUser | null = null
   let gists: GitHubGist[] = []
   let repos: GitHubRepo[] = []
 
-  if (username) {
-    try {
-      const [user, userGists, userRepos] = await Promise.all([
-        getUser(username),
-        getUserGists(username),
-        getUserRepos(username),
-      ])
-      githubUser = user
-      gists = userGists
-      repos = userRepos
-    } catch (err) {
-      console.warn("[gist] GitHub API error:", err)
-    }
+  try {
+    const token = (session?.user as { accessToken?: string })?.accessToken
+    const [user, userGists, userRepos] = await Promise.all([
+      getUser(username!, token),
+      getUserGists(username!, token),
+      getUserRepos(username!, token),
+    ])
+    githubUser = user
+    gists = userGists
+    repos = userRepos
+  } catch (err) {
+    console.warn("[gist] GitHub API error:", err)
   }
 
-  const isSignedIn = !!username
+  const isSignedIn = true
 
   return (
     <SidebarProvider
