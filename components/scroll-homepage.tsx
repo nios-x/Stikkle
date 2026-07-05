@@ -71,17 +71,17 @@ export default function ScrollHomepage() {
         {/* ── Phase 2: Features ── */}
         <motion.div
           style={{ opacity: featuresOpacity, y: featuresY, scale: featuresScale, pointerEvents: featuresPointerEvents }}
-          className="absolute inset-0 flex items-center bg-white/95 justify-center px-6"
+          className="absolute inset-0 z-10 flex items-center justify-center bg-background/95 px-6 backdrop-blur-sm"
         >
-          <div className="container mx-auto max-w-6xl">
+          <div className="container relative z-20 mx-auto max-w-6xl">
             <div className="mb-12 text-center">
               <Badge variant="secondary" className="mb-4">
                 <SparklesIcon className="mr-1.5 size-3" /> Next-Gen Architecture
               </Badge>
-              <h2 className="text-4xl font-bold tracking-tight md:text-6xl">
+              <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-6xl">
                 Built for velocity.
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-foreground/80">
                 Stikkle provides a comprehensive suite of tools designed to help teams collaborate, ship faster, and maintain perfect stability.
               </p>
             </div>
