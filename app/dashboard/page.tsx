@@ -14,7 +14,7 @@ export default async function Page() {
     (session?.user as { login?: string } | undefined)?.login ?? null
 
   if (!username) {
-    redirect("/auth")
+    redirect("/api/auth/signin")
   }
 
   // Fetch all GitHub data in parallel
@@ -24,9 +24,10 @@ export default async function Page() {
   let prs: GitHubPR[] = []
 
   try {
+    const token = (session?.user as { accessToken?: string })?.accessToken
     const [user, activity] = await Promise.all([
-      getUser(username),
-      getUserActivity(username, 6), // fetch 6 items for the layout grid
+      getUser(username, token),
+      getUserActivity(username, 6, token), // fetch 6 items for the layout grid
     ])
     githubUser = user
     repos = activity.repos

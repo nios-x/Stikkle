@@ -1,17 +1,16 @@
 /**
  * lib/github.ts
  * Complete typed wrapper around the GitHub REST API.
- * All requests use the GITHUB_TOKEN PAT from env for authentication.
+ * Uses the OAuth access token from the user's NextAuth session.
  */
 
 const GITHUB_API = "https://api.github.com";
 
 function githubHeaders(accessToken?: string): HeadersInit {
-  const token = accessToken || process.env.GITHUB_TOKEN;
   return {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
   };
 }
 
@@ -114,12 +113,10 @@ export type GitHubLanguages = Record<string, number>;
  * GET /users/{username}
  */
 export async function getUser(username: string, accessToken?: string): Promise<GitHubUser> {
-  console.log(`[GitHub API] Fetching user profile for ${username}...`);
   const res = await fetch(`${GITHUB_API}/users/${username}`, {
     headers: githubHeaders(accessToken),
     next: { revalidate: 600 },
   });
-  console.log(`[GitHub API Response] User profile ${username}: Status ${res.status}`);
   if (!res.ok) throw new GitHubApiError(res.status, `User ${username} not found`);
   return res.json() as Promise<GitHubUser>;
 }
@@ -128,12 +125,10 @@ export async function getUser(username: string, accessToken?: string): Promise<G
  * GET /users/{username}/gists
  */
 export async function getUserGists(username: string, accessToken?: string): Promise<GitHubGist[]> {
-  console.log(`[GitHub API] Fetching gists for ${username}...`);
   const res = await fetch(
     `${GITHUB_API}/users/${username}/gists?per_page=100`,
     { headers: githubHeaders(accessToken), next: { revalidate: 300 } }
   );
-  console.log(`[GitHub API Response] Gists ${username}: Status ${res.status}`);
   if (!res.ok) throw new GitHubApiError(res.status, `Failed to fetch gists for ${username}`);
   return res.json() as Promise<GitHubGist[]>;
 }
@@ -142,12 +137,10 @@ export async function getUserGists(username: string, accessToken?: string): Prom
  * GET /users/{username}/repos
  */
 export async function getUserRepos(username: string, accessToken?: string): Promise<GitHubRepo[]> {
-  console.log(`[GitHub API] Fetching repos for ${username}...`);
   const res = await fetch(
     `${GITHUB_API}/users/${username}/repos?per_page=100&sort=updated&direction=desc`,
     { headers: githubHeaders(accessToken), next: { revalidate: 300 } }
   );
-  console.log(`[GitHub API Response] Repos ${username}: Status ${res.status}`);
   if (!res.ok) throw new GitHubApiError(res.status, `Failed to fetch repos for ${username}`);
   return res.json() as Promise<GitHubRepo[]>;
 }
@@ -156,12 +149,10 @@ export async function getUserRepos(username: string, accessToken?: string): Prom
  * GET /repos/{owner}/{repo}
  */
 export async function getRepo(owner: string, repo: string, accessToken?: string): Promise<GitHubRepo> {
-  console.log(`[GitHub API] Fetching repo ${owner}/${repo}...`);
   const res = await fetch(`${GITHUB_API}/repos/${owner}/${repo}`, {
     headers: githubHeaders(accessToken),
     next: { revalidate: 300 },
   });
-  console.log(`[GitHub API Response] Repo ${owner}/${repo}: Status ${res.status}`);
   if (!res.ok) throw new GitHubApiError(res.status, `Repo ${owner}/${repo} not found`);
   return res.json() as Promise<GitHubRepo>;
 }
@@ -175,12 +166,10 @@ export async function getRepoIssues(
   state: "open" | "closed" | "all" = "open",
   accessToken?: string
 ): Promise<GitHubIssue[]> {
-  console.log(`[GitHub API] Fetching issues for ${owner}/${repo} (state: ${state})...`);
   const res = await fetch(
     `${GITHUB_API}/repos/${owner}/${repo}/issues?state=${state}&per_page=100`,
     { headers: githubHeaders(accessToken), next: { revalidate: 300 } }
   );
-  console.log(`[GitHub API Response] Issues ${owner}/${repo}: Status ${res.status}`);
   if (!res.ok) throw new GitHubApiError(res.status, `Failed to fetch issues for ${owner}/${repo}`);
   const all = (await res.json()) as GitHubIssue[];
   return all.filter((item) => !item.pull_request);
@@ -195,12 +184,10 @@ export async function getRepoPulls(
   state: "open" | "closed" | "all" = "open",
   accessToken?: string
 ): Promise<GitHubPR[]> {
-  console.log(`[GitHub API] Fetching PRs for ${owner}/${repo} (state: ${state})...`);
   const res = await fetch(
     `${GITHUB_API}/repos/${owner}/${repo}/pulls?state=${state}&per_page=30&sort=updated&direction=desc`,
     { headers: githubHeaders(accessToken), next: { revalidate: 300 } }
   );
-  console.log(`[GitHub API Response] PRs ${owner}/${repo}: Status ${res.status}`);
   if (!res.ok) throw new GitHubApiError(res.status, `Failed to fetch PRs for ${owner}/${repo}`);
   return res.json() as Promise<GitHubPR[]>;
 }
@@ -213,12 +200,10 @@ export async function getRepoLanguages(
   repo: string,
   accessToken?: string
 ): Promise<GitHubLanguages> {
-  console.log(`[GitHub API] Fetching languages for ${owner}/${repo}...`);
   const res = await fetch(`${GITHUB_API}/repos/${owner}/${repo}/languages`, {
     headers: githubHeaders(accessToken),
     next: { revalidate: 600 },
   });
-  console.log(`[GitHub API Response] Languages ${owner}/${repo}: Status ${res.status}`);
   if (!res.ok) throw new GitHubApiError(res.status, `Failed to fetch languages for ${owner}/${repo}`);
   return res.json() as Promise<GitHubLanguages>;
 }
@@ -228,7 +213,6 @@ export async function getRepoLanguages(
  * Returns aggregated counts and recent items.
  */
 export async function getUserActivity(username: string, topN = 5, accessToken?: string) {
-  console.log(`[GitHub API] Aggregating user activity for ${username} (top ${topN} repos)...`);
   const repos = await getUserRepos(username, accessToken);
   const topRepos = [...repos]
     .filter((r) => !r.fork)

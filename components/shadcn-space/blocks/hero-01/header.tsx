@@ -54,7 +54,7 @@ const CollaborateButton = ({ className }: { className?: string }) => {
         )}
         style={{ paddingLeft: '1.25rem', paddingRight: '3.5rem' }}
         type="button"
-        onClick={!isSignedIn ? () => router.push("/auth") : undefined}
+        onClick={!isSignedIn ? () => signIn("github") : undefined}
         disabled={isSignedIn}
         onMouseEnter={!isSignedIn ? (e) => { e.currentTarget.style.paddingLeft = '3.5rem'; e.currentTarget.style.paddingRight = '1.25rem'; } : undefined}
         onMouseLeave={!isSignedIn ? (e) => { e.currentTarget.style.paddingLeft = '1.25rem'; e.currentTarget.style.paddingRight = '3.5rem'; } : undefined}

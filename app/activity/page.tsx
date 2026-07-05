@@ -21,7 +21,7 @@ export default async function ActivityPage() {
   const hasConnectedGithub = !!username
 
   if (!hasConnectedGithub) {
-    redirect("/auth")
+    redirect("/api/auth/signin")
   }
 
   let githubUser: GitHubUser | null = null

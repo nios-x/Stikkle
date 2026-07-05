@@ -33,7 +33,7 @@ function HeroSection({ avatarList }: HeroSectionProps) {
     if (session?.user) {
       router.push("/dashboard");
     } else {
-      router.push("/auth");
+      signIn("github");
     }
   }, [router, session]);
 

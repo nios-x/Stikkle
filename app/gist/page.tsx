@@ -20,7 +20,7 @@ export default async function GistPage() {
   const hasConnectedGithub = !!username
 
   if (!hasConnectedGithub) {
-    redirect("/auth")
+    redirect("/api/auth/signin")
   }
 
   let githubUser: GitHubUser | null = null
