@@ -107,13 +107,13 @@ export default function ScrollHomepage() {
         {/* ── Phase 3: Showcase ── */}
         <motion.div
           style={{ opacity: showcaseOpacity, y: showcaseY, pointerEvents: showcasePointerEvents }}
-          className="absolute bg-white inset-0 flex flex-col items-center justify-center px-6"
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-background/95 px-6 backdrop-blur-sm"
         >
           <div className="mb-10 text-center">
-            <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
+            <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
               Command your infrastructure
             </h2>
-            <p className="mt-3 text-lg text-muted-foreground">
+            <p className="mt-3 text-lg text-foreground/80">
               A unified dashboard that gives you x-ray vision into your projects.
             </p>
           </div>
