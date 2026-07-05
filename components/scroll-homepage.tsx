@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "motion/react";
 import AgencyHeroSection from "@/components/shadcn-space/blocks/hero-01/index";
 import { Button } from "@/components/ui/button";
 import {

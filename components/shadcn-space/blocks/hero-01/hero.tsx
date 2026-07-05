@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Instrument_Serif } from "next/font/google";
 import { Button } from "@/components/ui/button";
@@ -33,7 +33,7 @@ function HeroSection({ avatarList }: HeroSectionProps) {
     if (session?.user) {
       router.push("/dashboard");
     } else {
-      alert("Please login first.");
+      router.push("/auth");
     }
   }, [router, session]);
 

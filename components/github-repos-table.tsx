@@ -1,16 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { GitForkIcon, StarIcon, ExternalLinkIcon, CodeIcon } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { StarIcon, GitForkIcon, SearchIcon, CodeIcon, ArrowUpRightIcon } from "lucide-react"
 import type { GitHubRepo } from "@/lib/github"
 
 interface GitHubReposTableProps {
@@ -19,27 +10,27 @@ interface GitHubReposTableProps {
 }
 
 const LANG_COLORS: Record<string, string> = {
-  TypeScript: "bg-blue-500",
-  JavaScript: "bg-yellow-400",
-  Python: "bg-green-500",
-  Rust: "bg-orange-500",
-  Go: "bg-cyan-500",
-  Java: "bg-red-500",
-  "C++": "bg-purple-500",
-  C: "bg-gray-500",
-  HTML: "bg-orange-400",
-  CSS: "bg-blue-400",
-  Shell: "bg-green-600",
-  Ruby: "bg-red-400",
+  TypeScript: "bg-blue-500 border-blue-400/20",
+  JavaScript: "bg-yellow-500 border-yellow-400/20",
+  Python: "bg-green-500 border-green-400/20",
+  Rust: "bg-orange-500 border-orange-400/20",
+  Go: "bg-cyan-500 border-cyan-400/20",
+  Java: "bg-red-500 border-red-400/20",
+  "C++": "bg-purple-500 border-purple-400/20",
+  C: "bg-gray-500 border-gray-400/20",
+  HTML: "bg-orange-400 border-orange-400/20",
+  CSS: "bg-blue-400 border-blue-400/20",
+  Shell: "bg-zinc-600 border-zinc-500/20",
+  Ruby: "bg-red-400 border-red-400/20",
 }
 
 function LangDot({ lang }: { lang: string | null }) {
   if (!lang) return null
-  const color = LANG_COLORS[lang] ?? "bg-gray-400"
+  const color = LANG_COLORS[lang] ?? "bg-zinc-700 border-zinc-600/20"
   return (
-    <span className="flex items-center gap-1.5">
-      <span className={`inline-block size-2.5 rounded-full ${color}`} />
-      <span className="text-sm text-muted-foreground">{lang}</span>
+    <span className="flex items-center gap-1.5 text-xs text-zinc-500">
+      <span className={`inline-block size-2 rounded-full ${color}`} />
+      <span className="font-medium text-zinc-400">{lang}</span>
     </span>
   )
 }
@@ -53,116 +44,97 @@ export function GitHubReposTable({ repos, username }: GitHubReposTableProps) {
       (r.description ?? "").toLowerCase().includes(filter.toLowerCase())
   )
 
-  if (repos.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16 text-muted-foreground">
-        <CodeIcon className="size-8 opacity-40" />
-        <p className="text-sm">No repositories found for <strong>{username}</strong>.</p>
-        <p className="text-xs opacity-60">Make sure your GITHUB_TOKEN is set in .env</p>
-      </div>
-    )
+  function getRelativeTime(iso: string) {
+    const diff = new Date().getTime() - new Date(iso).getTime()
+    const mins = Math.floor(diff / 60000)
+    if (mins < 60) return `${mins}m ago`
+    const hrs = Math.floor(mins / 60)
+    if (hrs < 24) return `${hrs}h ago`
+    const days = Math.floor(hrs / 24)
+    return `${days}d ago`
   }
 
   return (
-    <div className="flex flex-col gap-4 px-4 lg:px-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="px-4 lg:px-6 space-y-5">
+      {/* Search Header */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pb-4 border-b border-zinc-900">
         <div>
-          <h2 className="text-lg font-semibold">Repositories</h2>
-          <p className="text-sm text-muted-foreground">
-            {repos.length} repos for{" "}
-            <a
-              href={`https://github.com/${username}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-foreground underline-offset-4 hover:underline"
-            >
-              @{username}
-            </a>
-          </p>
+          <h3 className="text-sm font-medium text-zinc-200">Repositories</h3>
+          <p className="text-xs text-zinc-500">Active public repositories on GitHub</p>
         </div>
-        <input
-          type="search"
-          placeholder="Filter repositories…"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="h-8 w-52 rounded-md border bg-background px-3 text-sm outline-none ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
-        />
+        <div className="relative max-w-xs w-full">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-zinc-500" />
+          <input
+            type="text"
+            placeholder="Search repositories..."
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="w-full h-9 pl-9 pr-4 rounded-lg bg-zinc-950/80 border border-zinc-800 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-700 transition-all font-medium"
+          />
+        </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-hidden rounded-lg border">
-        <Table>
-          <TableHeader className="sticky top-0 z-10 bg-muted">
-            <TableRow>
-              <TableHead className="w-[280px]">Repository</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead className="w-[130px]">Language</TableHead>
-              <TableHead className="w-[90px] text-right">
-                <StarIcon className="ml-auto size-3.5" />
-              </TableHead>
-              <TableHead className="w-[90px] text-right">
-                <GitForkIcon className="ml-auto size-3.5" />
-              </TableHead>
-              <TableHead className="w-[80px]">Updated</TableHead>
-              <TableHead className="w-[40px]" />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filtered.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
-                  No repositories match &ldquo;{filter}&rdquo;
-                </TableCell>
-              </TableRow>
-            ) : (
-              filtered.map((repo) => (
-                <TableRow key={repo.id}>
-                  <TableCell className="font-medium">
-                    <div className="flex items-center gap-2">
-                      {repo.private && (
-                        <Badge variant="outline" className="text-xs px-1 py-0">
-                          Private
-                        </Badge>
-                      )}
-                      <span className="truncate">{repo.name}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="max-w-[240px] truncate text-sm text-muted-foreground">
-                    {repo.description ?? <span className="opacity-40 italic">No description</span>}
-                  </TableCell>
-                  <TableCell>
-                    <LangDot lang={repo.language} />
-                  </TableCell>
-                  <TableCell className="text-right tabular-nums text-sm">
-                    {repo.stargazers_count.toLocaleString()}
-                  </TableCell>
-                  <TableCell className="text-right tabular-nums text-sm">
-                    {repo.forks_count.toLocaleString()}
-                  </TableCell>
-                  <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
-                    {new Date(repo.updated_at).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </TableCell>
-                  <TableCell>
+      {filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-zinc-800 py-16 text-zinc-500 bg-zinc-950/10">
+          <CodeIcon className="size-6 text-zinc-700" />
+          <p className="text-xs">No matching repositories found.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filtered.map((repo) => (
+            <div
+              key={repo.id}
+              className="border border-zinc-900 bg-zinc-950/20 hover:border-zinc-800/80 hover:bg-zinc-950/40 rounded-xl p-5 flex flex-col justify-between gap-4 transition-all duration-200 group"
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
                     <a
                       href={repo.html_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center text-muted-foreground hover:text-foreground"
-                      aria-label={`Open ${repo.name} on GitHub`}
+                      className="text-sm font-medium text-zinc-200 hover:text-zinc-100 hover:underline truncate inline-flex items-center gap-1 group/link"
                     >
-                      <ExternalLinkIcon className="size-3.5" />
+                      {repo.name}
+                      <ArrowUpRightIcon className="size-3 text-zinc-600 group-hover/link:text-zinc-400 opacity-0 group-hover/link:opacity-100 transition-opacity" />
                     </a>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+                    <span className="text-[9px] font-mono text-zinc-500 bg-zinc-900 border border-zinc-800/60 px-1.5 py-0.5 rounded leading-none">
+                      Public
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono text-zinc-600 shrink-0">
+                    {getRelativeTime(repo.pushed_at)}
+                  </span>
+                </div>
+
+                {repo.description && (
+                  <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
+                    {repo.description}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex items-center gap-4 pt-1 border-t border-zinc-900/60">
+                <LangDot lang={repo.language} />
+                
+                {repo.stargazers_count > 0 && (
+                  <span className="flex items-center gap-1 text-[10px] font-mono text-zinc-500">
+                    <StarIcon className="size-3 text-zinc-600" />
+                    {repo.stargazers_count}
+                  </span>
+                )}
+
+                {repo.forks_count > 0 && (
+                  <span className="flex items-center gap-1 text-[10px] font-mono text-zinc-500">
+                    <GitForkIcon className="size-3 text-zinc-600" />
+                    {repo.forks_count}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

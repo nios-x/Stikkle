@@ -7,29 +7,38 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getUser, getUserRepos } from "@/lib/github"
 import type { GitHubUser, GitHubRepo } from "@/lib/github"
+import { redirect } from "next/navigation"
 
 export default async function PublicRepoPage() {
   const session = await getServerSession(authOptions)
   const username: string | null =
-    (session?.user as { login?: string } | undefined)?.login ?? null
+    (session?.user as { login?: string } | undefined)?.login ??
+    session?.user?.name?.replace(/\s+/g, "") ??
+    (session?.user?.email ? session.user.email.split("@")[0] : null) ??
+    null
+
+  const hasConnectedGithub = !!username
+
+  if (!hasConnectedGithub) {
+    redirect("/auth")
+  }
 
   let githubUser: GitHubUser | null = null
   let repos: GitHubRepo[] = []
 
-  if (username) {
-    try {
-      const [user, userRepos] = await Promise.all([
-        getUser(username),
-        getUserRepos(username),
-      ])
-      githubUser = user
-      repos = userRepos.filter(repo => !repo.private)
-    } catch (err) {
-      console.warn("[publicrepo] GitHub API error:", err)
-    }
+  try {
+    const token = (session?.user as { accessToken?: string })?.accessToken
+    const [user, userRepos] = await Promise.all([
+      getUser(username!, token),
+      getUserRepos(username!, token),
+    ])
+    githubUser = user
+    repos = userRepos.filter(repo => !repo.private)
+  } catch (err) {
+    console.warn("[publicrepo] GitHub API error:", err)
   }
 
-  const isSignedIn = !!username
+  const isSignedIn = true
 
   return (
     <SidebarProvider

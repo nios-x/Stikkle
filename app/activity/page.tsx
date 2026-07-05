@@ -7,35 +7,44 @@ import { getUser, getUserActivity } from "@/lib/github"
 import type { GitHubUser, GitHubRepo, GitHubIssue, GitHubPR } from "@/lib/github"
 import { ActivityContent } from "@/components/activity-content"
 import { buildActivityEvents } from "@/lib/activity"
+import { redirect } from "next/navigation"
 
 // ── Page ─────────────────────────────────────────────────────────────
 export default async function ActivityPage() {
   const session = await getServerSession(authOptions)
   const username: string | null =
-    (session?.user as { login?: string } | undefined)?.login ?? null
+    (session?.user as { login?: string } | undefined)?.login ??
+    session?.user?.name?.replace(/\s+/g, "") ??
+    (session?.user?.email ? session.user.email.split("@")[0] : null) ??
+    null
+
+  const hasConnectedGithub = !!username
+
+  if (!hasConnectedGithub) {
+    redirect("/auth")
+  }
 
   let githubUser: GitHubUser | null = null
   let repos: GitHubRepo[] = []
   let issues: GitHubIssue[] = []
   let prs: GitHubPR[] = []
 
-  if (username) {
-    try {
-      const [user, activity] = await Promise.all([
-        getUser(username),
-        getUserActivity(username, 10),
-      ])
-      githubUser = user
-      repos = activity.repos
-      issues = activity.issues
-      prs = activity.prs
-    } catch (err) {
-      console.warn("[activity] GitHub API error:", err)
-    }
+  try {
+    const token = (session?.user as { accessToken?: string })?.accessToken
+    const [user, activity] = await Promise.all([
+      getUser(username!, token),
+      getUserActivity(username!, 10, token),
+    ])
+    githubUser = user
+    repos = activity.repos
+    issues = activity.issues
+    prs = activity.prs
+  } catch (err) {
+    console.warn("[activity] GitHub API error:", err)
   }
 
-  const isSignedIn = !!username && repos.length > 0
-  const events = isSignedIn ? buildActivityEvents(repos, issues, prs) : []
+  const isSignedIn = true
+  const events = buildActivityEvents(repos, issues, prs)
 
   return (
     <SidebarProvider
