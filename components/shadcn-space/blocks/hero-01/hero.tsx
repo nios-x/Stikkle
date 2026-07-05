@@ -31,7 +31,7 @@ function HeroSection({ avatarList }: HeroSectionProps) {
 
   const handleGetStarted = useCallback(() => {
     if (session?.user) {
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     } else {
       signIn("github");
     }
